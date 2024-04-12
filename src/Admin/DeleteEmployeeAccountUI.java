@@ -5,8 +5,6 @@ import Jdbc_Connection.DatabaseConnection;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class DeleteEmployeeAccountUI extends JFrame {
@@ -68,39 +66,32 @@ public class DeleteEmployeeAccountUI extends JFrame {
         add(panel);
 
         // Action Listener for delete button
-        deleteButton.addActionListener(new ActionListener() {
+        deleteButton.addActionListener(e -> {
+            String empId = empIdField.getText();
+            // Perform database deletion logic
+            try (Connection connection = DatabaseConnection.getConnection()) {
+                // Create a PreparedStatement
+                String sql = "DELETE FROM employees WHERE employee_id = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, empId);
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String empId = empIdField.getText();
-                // Perform database deletion logic
-                try (Connection connection = DatabaseConnection.getConnection()) {
-                    // Create a PreparedStatement
-                    String sql = "DELETE FROM employees WHERE employee_id = ?";
-                    PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                    preparedStatement.setString(1, empId);
+                // Execute the update
+                int rowsAffected = preparedStatement.executeUpdate();
 
-                    // Execute the update
-                    int rowsAffected = preparedStatement.executeUpdate();
-
-                    if (rowsAffected > 0) {
-                        JOptionPane.showMessageDialog(null, "Employee account deleted successfully!\nEmployee ID: " + empId);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Failed to delete employee account.");
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Employee account deleted successfully!\nEmployee ID: " + empId);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to delete employee account.");
                 }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
             }
         });
 
-        gobackButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                new AdminEntryUI().setVisible(true);
-            }
+        gobackButton.addActionListener(e -> {
+            dispose();
+            new AdminEntryUI().setVisible(true);
         });
 
         // For demonstration, just displaying a message
@@ -109,11 +100,7 @@ public class DeleteEmployeeAccountUI extends JFrame {
 
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new DeleteEmployeeAccountUI().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new DeleteEmployeeAccountUI().setVisible(true));
     }
 }
 
