@@ -29,7 +29,7 @@ public class EntryUI extends JFrame {
     try {
       // Change "imagePath" to the path where your image is located
       File imageFile = new File(
-        "/home/hafiz/Clg_project/Project1-dms/Student-Management/src/Resources/aviation_logo-22 [Converted]-01.png"
+        "/home/hafiz/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-01.png"
       );
       if (imageFile.exists()) {
         Image originalImage = ImageIO.read(imageFile);
