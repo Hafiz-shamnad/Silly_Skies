@@ -12,7 +12,7 @@ public class DeleteEmployeeAccountUI extends JFrame {
     public DeleteEmployeeAccountUI() {
         setTitle("Delete Employee Account");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 200);
+        setSize(500, 200);
         setLocationRelativeTo(null); // Center the window
 
         // Components

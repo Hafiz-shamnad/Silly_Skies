@@ -142,9 +142,7 @@ public class FlightDetailsUI extends JFrame {
             '"' +
             capacity +
             '"' +
-            ");\n\"INSERT INTO travel_details (available_seats)\\n\" +\n" +
-                    "            \"VALUES (\" " + capacity +
-                    "            '\"' +\n" +");";
+            ");";
           System.out.println(sql);
           // Try-with-resources to automatically close resources
           try (Statement statement = getConnection().createStatement()) {

@@ -89,11 +89,13 @@ public class EntryUI extends JFrame {
 
     // Add action listeners to the buttons
     userLoginButton.addActionListener(e -> {
+      dispose();
       // Add your code for user login action
       new UserLoginUI().setVisible(true);
     });
 
     employeeLoginButton.addActionListener(e -> {
+      dispose();
       // Add your code for employee login action
       new EmployeeLoginUI().setVisible(true);
     });

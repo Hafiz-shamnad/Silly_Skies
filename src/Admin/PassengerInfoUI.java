@@ -115,14 +115,14 @@ public class PassengerInfoUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
           // Perform database search logic here
-          String name = nameField.getText().trim();
-          if (!name.isEmpty()) {
-            String passengerInfo = retrievePassengerInfo(name);
+          String passportNumber = passportField.getText().trim();
+          if (!passportNumber.isEmpty()) {
+            String passengerInfo = retrievePassengerInfo(passportNumber);
             passengerInfoArea.setText(passengerInfo);
           } else {
             JOptionPane.showMessageDialog(
               null,
-              "Please enter a name to search."
+              "Please enter a passportNumber to search."
             );
           }
         }
@@ -152,12 +152,12 @@ public class PassengerInfoUI extends JFrame {
   }
 
   // Method to retrieve passenger information from the database
-  private String retrievePassengerInfo(String name) {
+  private String retrievePassengerInfo(String passportNumber) {
     StringBuilder passengerInfo = new StringBuilder();
     try (Connection connection = DatabaseConnection.getConnection()) {
-      String query = "SELECT * FROM ticket_details WHERE passenger_name = ?";
+      String query = "SELECT * FROM ticket_details WHERE passport_number = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setString(1, name);
+        statement.setString(1, passportNumber);
         try (ResultSet resultSet = statement.executeQuery()) {
           if (resultSet.next()) {
             passengerInfo
@@ -176,8 +176,8 @@ public class PassengerInfoUI extends JFrame {
               .append("\n");
           } else {
             passengerInfo
-              .append("No passenger found with the name: ")
-              .append(name);
+              .append("No passenger found with the Passport Number: ")
+              .append(passportNumber);
           }
         }
       }

@@ -1,5 +1,7 @@
 package User;
 
+import CmnUtilities.UserLoginUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -53,7 +55,7 @@ public class UserEntryUI extends JFrame {
         panel.add(leftPanel);
 
         // Main panel for buttons
-        JLabel welcomeLabel = new JLabel("Welcome");
+        JLabel welcomeLabel = new JLabel("Welcome ,");
         welcomeLabel.setFont(new Font("Poppins", Font.BOLD, 24));
         welcomeLabel.setForeground(new Color(75, 118, 120));
         welcomeLabel.setBounds(500, 150, 400, 50);
@@ -103,6 +105,7 @@ public class UserEntryUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Open the Cancel Flight UI
                 dispose();
+                new UserLoginUI().setVisible(true);
             }
         });
     }

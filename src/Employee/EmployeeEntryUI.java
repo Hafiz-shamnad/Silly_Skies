@@ -53,7 +53,7 @@ public class EmployeeEntryUI extends JFrame {
       panel.add(leftPanel);
 
       // Add "Welcome" heading
-      JLabel welcomeLabel = new JLabel("Welcome");
+      JLabel welcomeLabel = new JLabel("Welcome ,");
       welcomeLabel.setFont(new Font("Poppins", Font.BOLD, 24));
       welcomeLabel.setForeground(new Color(75, 118, 120));
       welcomeLabel.setBounds(500, 150, 400, 50);

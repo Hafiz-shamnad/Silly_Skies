@@ -8,7 +8,7 @@ import javax.swing.*;
 public class AdminEntryUI extends JFrame {
 
   public AdminEntryUI() {
-      setTitle("Admin and Employee Entry");
+      setTitle("Admin Page");
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       setSize(1440, 1024);
       setLocationRelativeTo(null); // Center the window
@@ -62,15 +62,17 @@ public class AdminEntryUI extends JFrame {
       // Add logout button on the right side
       JButton logoutButton = new JButton("Logout");
       logoutButton.setBounds(100, 600, 150, 30);
-      logoutButton.setBackground(new Color(49, 54, 60));
+      logoutButton.setBackground(buttonBgColor);
+      logoutButton.setForeground(buttonTextColor);
+      logoutButton.setFont(buttonFont);
       leftPanel.add(logoutButton);
       panel.add(leftPanel);
 
       // Add "Welcome" heading
-      JLabel welcomeLabel = new JLabel("Welcome");
+      JLabel welcomeLabel = new JLabel("Welcome ,");
       welcomeLabel.setFont(new Font("Poppins", Font.BOLD, 24));
       welcomeLabel.setForeground(new Color(75, 118, 120));
-      welcomeLabel.setBounds(500, 50, 400, 50);
+      welcomeLabel.setBounds(500, 100, 400, 50);
       panel.add(welcomeLabel);
 
       // Add buttons on the right side

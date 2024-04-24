@@ -35,7 +35,7 @@ public class UserLoginUI extends JFrame {
     // Load image
     try {
       // Change "imagePath" to the path where your image is located
-      File imageFile = new File("/home/hafiz/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-white-01.png");
+      File imageFile = new File("/home/anonym8y/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-white-01.png");
       if (imageFile.exists()) {
         Image originalImage = ImageIO.read(imageFile);
         // Scale the image to desired dimensions
