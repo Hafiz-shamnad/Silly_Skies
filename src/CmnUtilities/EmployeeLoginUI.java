@@ -22,7 +22,7 @@ public class EmployeeLoginUI extends JFrame {
   public EmployeeLoginUI() {
     setTitle("Login");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(1440, 1024); // Set frame size to match requirements
+    setSize(1200, 720); // Set frame size to match requirements
     setLocationRelativeTo(null); // Center the window
 
 // Components

@@ -18,7 +18,7 @@ public class FlightBookingUI extends JFrame {
     public FlightBookingUI() {
         setTitle("Flight Booking");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1440, 1024);
+        setSize(1080, 720);
         setLocationRelativeTo(null); // Center the window
         flightTable = new JTable();
         JScrollPane flightScrollPane = new JScrollPane(flightTable);

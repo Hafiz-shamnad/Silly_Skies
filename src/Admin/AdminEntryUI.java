@@ -10,7 +10,7 @@ public class AdminEntryUI extends JFrame {
   public AdminEntryUI() {
       setTitle("Admin Page");
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      setSize(1440, 1024);
+      setSize(1200, 720);
       setLocationRelativeTo(null); // Center the window
 
       // Components

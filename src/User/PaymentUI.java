@@ -1,12 +1,17 @@
 package User;
 
+import Jdbc_Connection.DatabaseConnection;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class PaymentUI extends JFrame {
-
+    Connection connection = null;
     public PaymentUI() {
         setTitle("Payment");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,14 +70,45 @@ public class PaymentUI extends JFrame {
                 String cardNumber = cardNumberField.getText();
                 String expiryDate = expiryDateField.getText();
                 String cvv = cvvField.getText();
+            // Database connection
 
-                // Perform payment processing logic here
+                try {
+                    // Establish database connection
+                    connection = DatabaseConnection.getConnection();
+
+                    // Create SQL query to insert payment details into the database
+                    String sql = "INSERT INTO payments (card_number, expiry_date, cvv) VALUES (?, ?, ?)";
+                    PreparedStatement statement = connection.prepareStatement(sql);
+                    statement.setString(1, cardNumber);
+                    statement.setString(2, expiryDate);
+                    statement.setString(3, cvv);
+
+                    // Execute the insert query
+                    int rowsInserted = statement.executeUpdate();
+
+                    if (rowsInserted > 0) {
+                        JOptionPane.showMessageDialog(null, "                String message = \"Payment successful!\\n\" +\n" +
+                                "                        \"Card Number: \" + cardNumber + \"\\n\" +\n" +
+                                "                        \"Expiry Date: \" + expiryDate + \"\\n\" +\n" +
+                                "                        \"CVV: \" + cvv;\n" +
+                                "Payment details inserted successfully!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to insert payment details.");
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+                } finally {
+                    try {
+                        // Close the database connection
+                        if (connection != null) {
+                            connection.close();
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
                 // For demonstration, just displaying a message
-                String message = "Payment successful!\n" +
-                        "Card Number: " + cardNumber + "\n" +
-                        "Expiry Date: " + expiryDate + "\n" +
-                        "CVV: " + cvv;
-                JOptionPane.showMessageDialog(null, message);
             }
         });
 

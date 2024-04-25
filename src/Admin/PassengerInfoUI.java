@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 public class PassengerInfoUI extends JFrame {
-
+  private Connection connection;
   public PassengerInfoUI() {
     setTitle("Passenger Information");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -117,8 +117,13 @@ public class PassengerInfoUI extends JFrame {
           // Perform database search logic here
           String passportNumber = passportField.getText().trim();
           if (!passportNumber.isEmpty()) {
-            String passengerInfo = retrievePassengerInfo(passportNumber);
-            passengerInfoArea.setText(passengerInfo);
+              String passengerInfo = null;
+              try {
+                  passengerInfo = retrievePassengerInfo(passportNumber);
+              } catch (SQLException ex) {
+                  throw new RuntimeException(ex);
+              }
+              passengerInfoArea.setText(passengerInfo);
           } else {
             JOptionPane.showMessageDialog(
               null,
@@ -152,44 +157,50 @@ public class PassengerInfoUI extends JFrame {
   }
 
   // Method to retrieve passenger information from the database
-  private String retrievePassengerInfo(String passportNumber) {
+  private String retrievePassengerInfo(String passportNumber) throws SQLException {
     StringBuilder passengerInfo = new StringBuilder();
-    try (Connection connection = DatabaseConnection.getConnection()) {
+    if (connection == null || connection.isClosed()) {
+      connection = DatabaseConnection.getConnection();
+      System.out.println("Connection established."); // Log connection status
+    }
+    if (connection != null){
+      // No need to declare a local variable named 'connection'
       String query = "SELECT * FROM ticket_details WHERE passport_number = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, passportNumber);
         try (ResultSet resultSet = statement.executeQuery()) {
           if (resultSet.next()) {
             passengerInfo
-              .append("Passenger Information:\n")
-              .append("Name: ")
-              .append(resultSet.getString("passenger_name"))
-              .append("\n")
-              .append("Passport Number: ")
-              .append(resultSet.getString("passport_number"))
-              .append("\n")
-              .append("Ticket Number: ")
-              .append(resultSet.getString("ticket_number"))
-              .append("\n")
-              .append("Seat Number: ")
-              .append(resultSet.getString("seat_number"))
-              .append("\n");
+                    .append("Passenger Information:\n")
+                    .append("Name: ")
+                    .append(resultSet.getString("passenger_name"))
+                    .append("\n")
+                    .append("Passport Number: ")
+                    .append(resultSet.getString("passport_number"))
+                    .append("\n")
+                    .append("Ticket Number: ")
+                    .append(resultSet.getString("ticket_number"))
+                    .append("\n")
+                    .append("Seat Number: ")
+                    .append(resultSet.getString("seat_number"))
+                    .append("\n");
           } else {
             passengerInfo
-              .append("No passenger found with the Passport Number: ")
-              .append(passportNumber);
+                    .append("No passenger found with the Passport Number: ")
+                    .append(passportNumber);
           }
         }
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(
+                null,
+                "Error retrieving passenger information: " + ex.getMessage()
+        );
       }
-    } catch (SQLException ex) {
-      ex.printStackTrace();
-      JOptionPane.showMessageDialog(
-        null,
-        "Error retrieving passenger information: " + ex.getMessage()
-      );
     }
     return passengerInfo.toString();
   }
+
 
   public static void main(String[] args) {
     SwingUtilities.invokeLater(

@@ -15,7 +15,7 @@ public class CreateAccountUI extends JFrame {
   public CreateAccountUI() {
     setTitle("Create Account");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(1440, 1024);
+    setSize(1200, 720);
     setLocationRelativeTo(null); // Center the window
 
     JLabel headingLabel = new JLabel("Create Your Profile");

@@ -17,7 +17,7 @@ public class CancelFlightUI extends JFrame {
     public CancelFlightUI() {
         setTitle("Cancel Flight");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1440, 1024);
+        setSize(1080, 720);
         setLocationRelativeTo(null); // Center the window
 
         JLabel headingLabel = new JLabel("Cancel Your Flight!");

@@ -8,7 +8,7 @@ public class EntryUI extends JFrame {
 
   public EntryUI() {
     setTitle("Silly Skies");
-    setSize(1440, 1024);
+    setSize(1380, 720);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null); // Center the frame on the screen
 
@@ -18,7 +18,7 @@ public class EntryUI extends JFrame {
 
     // Create right panel for rectangle and buttons
     JPanel rightPanel = new JPanel(null); // Use null layout
-    rightPanel.setPreferredSize(new Dimension(620, 1024));
+    rightPanel.setPreferredSize(new Dimension(620, 720));
     rightPanel.setBackground(new Color(34, 40, 49)); // Rectangle color
 
     JPanel leftPanel = new JPanel(new GridBagLayout());
@@ -29,7 +29,7 @@ public class EntryUI extends JFrame {
     try {
       // Change "imagePath" to the path where your image is located
       File imageFile = new File(
-        "/home/hafiz/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-01.png"
+        "/home/anonym8y/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-01.png"
       );
       if (imageFile.exists()) {
         Image originalImage = ImageIO.read(imageFile);

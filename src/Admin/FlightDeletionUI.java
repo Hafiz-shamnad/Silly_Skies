@@ -105,7 +105,6 @@ public class FlightDeletionUI extends JFrame {
   }
 
   // Method to delete flight from the database
-  // Method to delete flight from the database
   private void deleteFlight(String flightNumber) {
     try {
       if (connection == null || connection.isClosed()) {
