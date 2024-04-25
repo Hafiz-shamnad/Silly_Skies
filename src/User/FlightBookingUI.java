@@ -5,8 +5,6 @@ import Jdbc_Connection.DatabaseConnection;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.Vector;
 
@@ -69,10 +67,10 @@ public class FlightBookingUI extends JFrame {
         // Buttons
         JButton bookButton = new JButton("Book Now");
         JButton cancelButton = new JButton("Go Back");
-        bookButton.setBackground(new Color(34, 40, 49)); // Button background color 222831
-        bookButton.setForeground(new Color(238, 238, 238)); // Button text color eeeeee
-        cancelButton.setBackground(new Color(34, 40, 49)); // Button background color 222831
-        cancelButton.setForeground(new Color(238, 238, 238)); // Button text color eeeeee
+        bookButton.setBackground(new Color(34, 40, 49));
+        bookButton.setForeground(new Color(238, 238, 238));
+        cancelButton.setBackground(new Color(34, 40, 49));
+        cancelButton.setForeground(new Color(238, 238, 238));
         bookButton.setFont(new Font("Poppins", Font.BOLD, 15));
         cancelButton.setFont(new Font("Poppins", Font.BOLD, 15));
 
@@ -85,7 +83,7 @@ public class FlightBookingUI extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        panel.add(headingLabel,gbc);
+        panel.add(headingLabel, gbc);
         gbc.gridy++;
         // Name
         gbc.gridy++;
@@ -123,25 +121,19 @@ public class FlightBookingUI extends JFrame {
         panel.add(cancelButton, gbc);
 
         // Action Listeners
-        bookButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Get input details from GUI components
-                String passengerName = nameField.getText();
-                String passportNumber = passportField.getText();
-                travelId = travelIdField.getText();
-                // Perform booking logic
-                bookFlight(passengerName, passportNumber);
-            }
+        bookButton.addActionListener(_ -> {
+            // Get input details from GUI components
+            String passengerName = nameField.getText();
+            String passportNumber = passportField.getText();
+            travelId = travelIdField.getText();
+            // Perform booking logic
+            bookFlight(passengerName, passportNumber);
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Close the window and the connection
-                dispose();
-                closeConnection();
-            }
+        cancelButton.addActionListener(_ -> {
+            // Close the window and the connection
+            dispose();
+            closeConnection();
         });
 
         // Populate flight list
@@ -154,7 +146,7 @@ public class FlightBookingUI extends JFrame {
             connection = DatabaseConnection.getConnection();
             String query = "SELECT * FROM travel_details";
             try (PreparedStatement statement = connection.prepareStatement(query);
-                 ResultSet resultSet = statement.executeQuery()) {
+                    ResultSet resultSet = statement.executeQuery()) {
 
                 // Getting column names
                 ResultSetMetaData metaData = resultSet.getMetaData();
@@ -185,10 +177,11 @@ public class FlightBookingUI extends JFrame {
 
     private void bookFlight(String passengerName, String passportNumber) {
         // Perform booking logic with the database
-// Perform booking logic with the database
+        // Perform booking logic with the database
         try {
             String insertQuery = "INSERT INTO ticket_details (passenger_name, passport_number) VALUES (?, ?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery,
+                    Statement.RETURN_GENERATED_KEYS)) {
                 // Set parameters for the prepared statement
                 preparedStatement.setString(1, passengerName);
                 preparedStatement.setString(2, passportNumber);
@@ -238,7 +231,6 @@ public class FlightBookingUI extends JFrame {
         }
 
     }
-
 
     private void closeConnection() {
         // Close the connection if it's open

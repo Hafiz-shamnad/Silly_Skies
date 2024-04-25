@@ -1,12 +1,8 @@
 package Admin;
 
 import static Jdbc_Connection.DatabaseConnection.getConnection;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import javax.swing.*;
 
 public class CreateEmployeeAccountUI extends JFrame {
@@ -89,23 +85,20 @@ public class CreateEmployeeAccountUI extends JFrame {
 
     // Action Listeners
     createButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           // Retrieve entered account details
           String name = nameField.getText();
           String emId = emIdField.getText();
           String password = new String(passwordField.getPassword());
-          String sql =
-            "INSERT INTO employees (employee_id, name, password) " +
-            "VALUES (\"" +
-            emId +
-            "\", \"" +
-            name +
-            "\", \"" +
-            password +
-            '"' +
-            ");";
+          String sql = "INSERT INTO employees (employee_id, name, password) " +
+              "VALUES (\"" +
+              emId +
+              "\", \"" +
+              name +
+              "\", \"" +
+              password +
+              '"' +
+              ");";
 
           System.out.println(sql);
           // Try-with-resources to automatically close resources
@@ -115,7 +108,14 @@ public class CreateEmployeeAccountUI extends JFrame {
 
             // Check if any rows were affected
             if (rowsAffected > 0) {
-              System.out.println("Data inserted successfully.");
+              String message = "Account created successfully!\n" +
+                  "Employee ID : " +
+                  emId +
+                  "\n" +
+                  "Name: " +
+                  name +
+                  "\n";
+              JOptionPane.showMessageDialog(null, message);
             } else {
               System.out.println("Failed to insert data.");
             }
@@ -123,41 +123,18 @@ public class CreateEmployeeAccountUI extends JFrame {
             ex.printStackTrace();
             // Handle SQL exceptions
           }
-
-          // Perform account creation logic here
-          // For demonstration, just displaying a message
-          String message =
-            "Account created successfully!\n" +
-            "Employee ID : " +
-            emId +
-            "\n" +
-            "Name: " +
-            name +
-            "\n";
-          JOptionPane.showMessageDialog(null, message);
-        }
-      }
-    );
+        });
 
     gobackButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           dispose(); // Close the window
-        }
-      }
-    );
+        });
 
     add(panel);
   }
 
   public static void main(String[] args) {
     SwingUtilities.invokeLater(
-      new Runnable() {
-        public void run() {
-          new CreateEmployeeAccountUI().setVisible(true);
-        }
-      }
-    );
+        () -> new CreateEmployeeAccountUI().setVisible(true));
   }
 }

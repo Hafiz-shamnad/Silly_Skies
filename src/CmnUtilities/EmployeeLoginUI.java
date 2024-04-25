@@ -1,23 +1,14 @@
 package CmnUtilities;
 
-import Admin.AdminEntryUI;
 import Employee.EmployeeEntryUI;
 import Jdbc_Connection.*;
-import User.UserEntryUI;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
-import java.util.Objects;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class EmployeeLoginUI extends JFrame {
-
-  static boolean admin = false;
-  static boolean user = false;
 
   public EmployeeLoginUI() {
     setTitle("Login");
@@ -25,11 +16,11 @@ public class EmployeeLoginUI extends JFrame {
     setSize(1200, 720); // Set frame size to match requirements
     setLocationRelativeTo(null); // Center the window
 
-// Components
+    // Components
     JPanel mainPanel = new JPanel(new BorderLayout());
     mainPanel.setBackground(new Color(238, 238, 238)); // Background color
 
-// Left side panel
+    // Left side panel
     JPanel leftPanel = new JPanel();
     leftPanel.setPreferredSize(new Dimension(620, 1024));
     leftPanel.setBackground(new Color(34, 40, 49)); // Rectangle color
@@ -38,7 +29,8 @@ public class EmployeeLoginUI extends JFrame {
     // Load image
     try {
       // Change "imagePath" to the path where your image is located
-      File imageFile = new File("/home/anonym8y/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-white-01.png");
+      File imageFile = new File(
+          "/home/anonym8y/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-white-01.png");
       if (imageFile.exists()) {
         Image originalImage = ImageIO.read(imageFile);
         // Scale the image to desired dimensions
@@ -61,12 +53,12 @@ public class EmployeeLoginUI extends JFrame {
       ex.printStackTrace();
     }
 
-// Right side panel
+    // Right side panel
     JPanel rightPanel = new JPanel(new GridBagLayout());
     rightPanel.setPreferredSize(new Dimension(820, 1024));
     rightPanel.setBackground(new Color(238, 238, 238)); // Background color
 
-// Components from the new code snippet
+    // Components from the new code snippet
     JLabel employeeLabel = new JLabel("Employee ID");
     employeeLabel.setForeground(new Color(75, 118, 120)); // Label color 4B7678
     employeeLabel.setFont(new Font("Poppins", Font.BOLD, 18));
@@ -81,10 +73,10 @@ public class EmployeeLoginUI extends JFrame {
 
     JButton loginButton = new JButton("Login");
     loginButton.setBackground(new Color(34, 40, 49)); // Button background color 222831
-    loginButton.setForeground(new Color(238, 238, 238)); // Button text color eeeeee
+    loginButton.setForeground(new Color(238, 238, 238));
     loginButton.setFont(new Font("Poppins", Font.BOLD, 15)); // Font Poppins, bold, size 24
 
-// Layout
+    // Layout
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridx = 0;
     gbc.gridy = 0;
@@ -107,13 +99,9 @@ public class EmployeeLoginUI extends JFrame {
 
     add(mainPanel);
 
-
-
     // Action Listener
     loginButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           String emId = employeeField.getText();
           String password = new String(passwordField.getPassword());
 
@@ -127,9 +115,7 @@ public class EmployeeLoginUI extends JFrame {
           } else {
             dispose();
           }
-        }
-      }
-    );
+        });
   }
 
   public static boolean validateUser(String username, String password) {
@@ -137,10 +123,9 @@ public class EmployeeLoginUI extends JFrame {
     String sql = "SELECT * FROM employees WHERE employee_id = ?";
     // Create a PreparedStatement with the SQL query
     try (
-      PreparedStatement preparedStatement = DatabaseConnection
-        .getConnection()
-        .prepareStatement(sql)
-    ) {
+        PreparedStatement preparedStatement = DatabaseConnection
+            .getConnection()
+            .prepareStatement(sql)) {
       preparedStatement.setString(1, username);
 
       // Execute the query and retrieve the result set
@@ -163,11 +148,6 @@ public class EmployeeLoginUI extends JFrame {
 
   public static void main(String[] args) {
     SwingUtilities.invokeLater(
-      new Runnable() {
-        public void run() {
-          new EmployeeLoginUI().setVisible(true);
-        }
-      }
-    );
+        () -> new EmployeeLoginUI().setVisible(true));
   }
 }

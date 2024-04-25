@@ -2,12 +2,8 @@ package CmnUtilities;
 
 import static Jdbc_Connection.DatabaseConnection.getConnection;
 
-import Jdbc_Connection.DatabaseConnection;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
-import java.sql.SQLException;
 import javax.swing.*;
 
 public class CreateAccountUI extends JFrame {
@@ -28,15 +24,15 @@ public class CreateAccountUI extends JFrame {
     JTextField nameField = new JTextField(40);
     JLabel emailLabel = new JLabel("Email");
     JTextField emailField = new JTextField(40);
-    JLabel passnumLabel = new JLabel("Passport Number");
-    JTextField passnumField = new JTextField(40);
+    JLabel passportNumberLabel = new JLabel("Passport Number");
+    JTextField passportNumberField = new JTextField(40);
     JLabel passwordLabel = new JLabel("Password");
     JPasswordField passwordField = new JPasswordField(40);
     JLabel addressLabel = new JLabel("Address");
     JTextField addressField = new JTextField(40);
     addressField.setPreferredSize(new Dimension(200, 50));
     JButton createButton = new JButton("Create");
-    JButton gobackButton = new JButton("Exit");
+    JButton goBackButton = new JButton("Exit");
 
     // Set font colors and styles
     Font labelFont = new Font("Poppins", Font.BOLD, 14);
@@ -58,11 +54,11 @@ public class CreateAccountUI extends JFrame {
     emailField.setFont(textFieldFont);
     emailField.setBackground(textFieldColor);
 
-    passnumLabel.setFont(labelFont);
-    passnumLabel.setForeground(labelColor);
+    passportNumberLabel.setFont(labelFont);
+    passportNumberLabel.setForeground(labelColor);
 
-    passnumField.setFont(textFieldFont);
-    passnumField.setBackground(textFieldColor);
+    passportNumberField.setFont(textFieldFont);
+    passportNumberField.setBackground(textFieldColor);
 
     passwordLabel.setFont(labelFont);
     passwordLabel.setForeground(labelColor);
@@ -80,9 +76,9 @@ public class CreateAccountUI extends JFrame {
     createButton.setBackground(buttonBgColor);
     createButton.setForeground(buttonTextColor);
 
-    gobackButton.setFont(labelFont);
-    gobackButton.setBackground(buttonBgColor);
-    gobackButton.setForeground(buttonTextColor);
+    goBackButton.setFont(labelFont);
+    goBackButton.setBackground(buttonBgColor);
+    goBackButton.setForeground(buttonTextColor);
 
     // Layout
     JPanel panel = new JPanel(new GridBagLayout());
@@ -94,7 +90,7 @@ public class CreateAccountUI extends JFrame {
     gbc.anchor = GridBagConstraints.WEST;
     gbc.insets = new Insets(5, 5, 5, 5);
 
-    panel.add(headingLabel,gbc);
+    panel.add(headingLabel, gbc);
 
     gbc.gridy++;
     panel.add(nameLabel, gbc);
@@ -109,9 +105,9 @@ public class CreateAccountUI extends JFrame {
 
     gbc.gridy++;
     gbc.gridx = 0;
-    panel.add(passnumLabel, gbc);
+    panel.add(passportNumberLabel, gbc);
     gbc.gridx++;
-    panel.add(passnumField, gbc);
+    panel.add(passportNumberField, gbc);
 
     gbc.gridy++;
     gbc.gridx = 0;
@@ -132,44 +128,41 @@ public class CreateAccountUI extends JFrame {
     panel.add(createButton, gbc);
 
     gbc.gridy++;
-    panel.add(gobackButton, gbc);
+    panel.add(goBackButton, gbc);
 
     add(panel);
     // Action Listeners
     createButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           // Retrieve entered account details
           String name = nameField.getText();
           String email = emailField.getText();
           String password = new String(passwordField.getPassword());
           String address = addressField.getText();
-          String passnum = passnumField.getText();
+          String passportNumber = passportNumberField.getText();
 
-          String sql =
-            "INSERT INTO users (username, password, user_type, email, house_address , passport_number)\n" +
-            "VALUES (" +
-            '"' +
-            name +
-            '"' +
-            ", " +
-            '"' +
-            password +
-            '"' +
-            ", 'user', " +
-            '"' +
-            email +
-            '"' +
-            ", " +
-            '"' +
-            address +
-            '"' +
-            ", " +
-            '"' +
-            passnum +
-            '"' +
-            ");\n";
+          String sql = "INSERT INTO users (username, password, user_type, email, house_address , passport_number)\n" +
+              "VALUES (" +
+              '"' +
+              name +
+              '"' +
+              ", " +
+              '"' +
+              password +
+              '"' +
+              ", 'user', " +
+              '"' +
+              email +
+              '"' +
+              ", " +
+              '"' +
+              address +
+              '"' +
+              ", " +
+              '"' +
+              passportNumber +
+              '"' +
+              ");\n";
           System.out.println(sql);
           // Try-with-resources to automatically close resources
           try (Statement statement = getConnection().createStatement()) {
@@ -178,7 +171,13 @@ public class CreateAccountUI extends JFrame {
 
             // Check if any rows were affected
             if (rowsAffected > 0) {
-              System.out.println("Data inserted successfully.");
+              String message = "Account created successfully!\n" +
+                  "Name: " +
+                  name +
+                  "\n" +
+                  "Email: " +
+                  email;
+              JOptionPane.showMessageDialog(null, message);
               dispose();
               new UserLoginUI().setVisible(true);
             } else {
@@ -188,41 +187,19 @@ public class CreateAccountUI extends JFrame {
             ex.printStackTrace();
             // Handle SQL exceptions
           }
+        });
 
-          // Perform account creation logic here
-          // For demonstration, just displaying a message
-          String message =
-            "Account created successfully!\n" +
-            "Name: " +
-            name +
-            "\n" +
-            "Email: " +
-            email;
-          JOptionPane.showMessageDialog(null, message);
-        }
-      }
-    );
-
-    gobackButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    goBackButton.addActionListener(
+        _ -> {
           dispose();
           // Close the window
-        }
-      }
-    );
+        });
 
     add(panel);
   }
 
   public static void main(String[] args) {
     SwingUtilities.invokeLater(
-      new Runnable() {
-        public void run() {
-          new CreateAccountUI().setVisible(true);
-        }
-      }
-    );
+        () -> new CreateAccountUI().setVisible(true));
   }
 }

@@ -7,8 +7,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
   // JDBC URL, username, and password of MySQL server
-  public static final String JDBC_URL =
-    "jdbc:mysql://localhost:3306/silly_skies";
+  public static final String JDBC_URL = "jdbc:mysql://localhost:3306/silly_skies";
   private static final String USERNAME = "user";
   private static final String PASSWORD = "User@2024";
 
@@ -22,8 +21,6 @@ public class DatabaseConnection {
       Class.forName("com.mysql.cj.jdbc.Driver");
       // Establish the connection
       connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
-      // Print a message when the connection is established
-      System.out.println("Database connection established successfully.");
     } catch (ClassNotFoundException | SQLException e) {
       e.printStackTrace();
       // Handle exceptions appropriately

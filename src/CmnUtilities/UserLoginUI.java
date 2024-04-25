@@ -4,8 +4,6 @@ import Admin.AdminEntryUI;
 import Jdbc_Connection.*;
 import User.UserEntryUI;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
@@ -35,7 +33,8 @@ public class UserLoginUI extends JFrame {
     // Load image
     try {
       // Change "imagePath" to the path where your image is located
-      File imageFile = new File("/home/anonym8y/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-white-01.png");
+      File imageFile = new File(
+          "/home/anonym8y/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-white-01.png");
       if (imageFile.exists()) {
         Image originalImage = ImageIO.read(imageFile);
         // Scale the image to desired dimensions
@@ -77,7 +76,7 @@ public class UserLoginUI extends JFrame {
 
     JButton loginButton = new JButton("LOGIN");
     loginButton.setBackground(new Color(34, 40, 49)); // Button background color 222831
-    loginButton.setForeground(new Color(238, 238, 238)); // Button text color eeeeee
+    loginButton.setForeground(new Color(238, 238, 238));
     loginButton.setFont(new Font("Poppins", Font.BOLD, 15)); // Font Poppins, bold, size 24
 
     // Layout
@@ -117,30 +116,26 @@ public class UserLoginUI extends JFrame {
     add(mainPanel);
     // Action Listener
     loginButton.addActionListener(
-            new ActionListener() {
-              @Override
-              public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText();
-                String password = new String(passwordField.getPassword());
+        _ -> {
+          String username = usernameField.getText();
+          String password = new String(passwordField.getPassword());
 
-                // Perform login authentication logic here
-                // For demonstration, check if username is "admin" and password is "admin"
+          // Perform login authentication logic here
+          // For demonstration, check if username is "admin" and password is "admin"
 
-                if (validateUser(username, password)) {
-                  // Open Admin Entry UI
-                  dispose(); // Close the login window
-                  if (admin) {
-                    new AdminEntryUI().setVisible(true);
-                  } else {
-                    new UserEntryUI().setVisible(true);
-                  }
-                } else {
-                  // Open Employee Entry UI
-                  dispose(); // Close the login window
-                }
-              }
+          if (validateUser(username, password)) {
+            // Open Admin Entry UI
+            dispose(); // Close the login window
+            if (admin) {
+              new AdminEntryUI().setVisible(true);
+            } else {
+              new UserEntryUI().setVisible(true);
             }
-    );
+          } else {
+            // Open Employee Entry UI
+            dispose(); // Close the login window
+          }
+        });
 
     mainPanel.add(rightPanel, BorderLayout.CENTER);
 
@@ -153,10 +148,9 @@ public class UserLoginUI extends JFrame {
 
     // Create a PreparedStatement with the SQL query
     try (
-            PreparedStatement preparedStatement = DatabaseConnection
-                    .getConnection()
-                    .prepareStatement(sql)
-    ) {
+        PreparedStatement preparedStatement = DatabaseConnection
+            .getConnection()
+            .prepareStatement(sql)) {
       preparedStatement.setString(1, username);
 
       // Execute the query and retrieve the result set
@@ -185,11 +179,6 @@ public class UserLoginUI extends JFrame {
 
   public static void main(String[] args) {
     SwingUtilities.invokeLater(
-            new Runnable() {
-              public void run() {
-                new UserLoginUI().setVisible(true);
-              }
-            }
-    );
+        () -> new UserLoginUI().setVisible(true));
   }
 }

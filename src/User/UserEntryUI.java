@@ -4,8 +4,6 @@ import CmnUtilities.UserLoginUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class UserEntryUI extends JFrame {
 
@@ -76,45 +74,29 @@ public class UserEntryUI extends JFrame {
         add(panel);
 
         // Action Listeners
-        paymentButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open the Payment UI
-                new PaymentUI().setVisible(true);
-            }
+        paymentButton.addActionListener(_ -> {
+            // Open the Payment UI
+            new PaymentUI().setVisible(true);
         });
 
-        flightBookingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open the Flight Booking UI
-                new FlightBookingUI().setVisible(true);
-            }
+        flightBookingButton.addActionListener(_ -> {
+            // Open the Flight Booking UI
+            new FlightBookingUI().setVisible(true);
         });
 
-        cancelFlightButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open the Cancel Flight UI
-                new CancelFlightUI().setVisible(true);
-            }
+        cancelFlightButton.addActionListener(_ -> {
+            // Open the Cancel Flight UI
+            new CancelFlightUI().setVisible(true);
         });
 
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open the Cancel Flight UI
-                dispose();
-                new UserLoginUI().setVisible(true);
-            }
+        logoutButton.addActionListener(_ -> {
+            // Open the Cancel Flight UI
+            dispose();
+            new UserLoginUI().setVisible(true);
         });
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new UserEntryUI().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new UserEntryUI().setVisible(true));
     }
 }

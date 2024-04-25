@@ -2,20 +2,16 @@ package Admin;
 
 import Jdbc_Connection.DatabaseConnection;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import javax.swing.*;
 
 public class PassengerInfoUI extends JFrame {
   private Connection connection;
+
   public PassengerInfoUI() {
     setTitle("Passenger Information");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(1440, 1024);
+    setSize(1350, 720);
     setLocationRelativeTo(null); // Center the window
 
     JLabel headingLabel = new JLabel("Passenger Info");
@@ -77,7 +73,7 @@ public class PassengerInfoUI extends JFrame {
     gbc.anchor = GridBagConstraints.WEST;
     gbc.insets = new Insets(5, 5, 5, 5);
 
-    panel.add(headingLabel,gbc);
+    panel.add(headingLabel, gbc);
 
     gbc.gridy++;
     panel.add(nameLabel, gbc);
@@ -85,7 +81,7 @@ public class PassengerInfoUI extends JFrame {
     panel.add(nameField, gbc);
 
     gbc.gridy++;
-    gbc.gridx=0;
+    gbc.gridx = 0;
     panel.add(passportLabel, gbc);
     gbc.gridx++;
     panel.add(passportField, gbc);
@@ -111,47 +107,34 @@ public class PassengerInfoUI extends JFrame {
 
     // Action Listeners
     searchButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           // Perform database search logic here
           String passportNumber = passportField.getText().trim();
           if (!passportNumber.isEmpty()) {
-              String passengerInfo = null;
-              try {
-                  passengerInfo = retrievePassengerInfo(passportNumber);
-              } catch (SQLException ex) {
-                  throw new RuntimeException(ex);
-              }
-              passengerInfoArea.setText(passengerInfo);
+            String passengerInfo = null;
+            try {
+              passengerInfo = retrievePassengerInfo(passportNumber);
+            } catch (SQLException ex) {
+              throw new RuntimeException(ex);
+            }
+            passengerInfoArea.setText(passengerInfo);
           } else {
             JOptionPane.showMessageDialog(
-              null,
-              "Please enter a passportNumber to search."
-            );
+                null,
+                "Please enter a passportNumber to search.");
           }
-        }
-      }
-    );
+        });
 
     editPassengerDetailsButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           // Open edit passenger details window
           new EditPassengerInfoUI().setVisible(true);
-        }
-      }
-    );
+        });
 
     closeButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           dispose(); // Close the window
-        }
-      }
-    );
+        });
 
     add(panel);
   }
@@ -163,7 +146,7 @@ public class PassengerInfoUI extends JFrame {
       connection = DatabaseConnection.getConnection();
       System.out.println("Connection established."); // Log connection status
     }
-    if (connection != null){
+    if (connection != null) {
       // No need to declare a local variable named 'connection'
       String query = "SELECT * FROM ticket_details WHERE passport_number = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -171,44 +154,37 @@ public class PassengerInfoUI extends JFrame {
         try (ResultSet resultSet = statement.executeQuery()) {
           if (resultSet.next()) {
             passengerInfo
-                    .append("Passenger Information:\n")
-                    .append("Name: ")
-                    .append(resultSet.getString("passenger_name"))
-                    .append("\n")
-                    .append("Passport Number: ")
-                    .append(resultSet.getString("passport_number"))
-                    .append("\n")
-                    .append("Ticket Number: ")
-                    .append(resultSet.getString("ticket_number"))
-                    .append("\n")
-                    .append("Seat Number: ")
-                    .append(resultSet.getString("seat_number"))
-                    .append("\n");
+                .append("Passenger Information:\n")
+                .append("Name: ")
+                .append(resultSet.getString("passenger_name"))
+                .append("\n")
+                .append("Passport Number: ")
+                .append(resultSet.getString("passport_number"))
+                .append("\n")
+                .append("Ticket Number: ")
+                .append(resultSet.getString("ticket_number"))
+                .append("\n")
+                .append("Seat Number: ")
+                .append(resultSet.getString("seat_number"))
+                .append("\n");
           } else {
             passengerInfo
-                    .append("No passenger found with the Passport Number: ")
-                    .append(passportNumber);
+                .append("No passenger found with the Passport Number: ")
+                .append(passportNumber);
           }
         }
       } catch (SQLException ex) {
         ex.printStackTrace();
         JOptionPane.showMessageDialog(
-                null,
-                "Error retrieving passenger information: " + ex.getMessage()
-        );
+            null,
+            "Error retrieving passenger information: " + ex.getMessage());
       }
     }
     return passengerInfo.toString();
   }
 
-
   public static void main(String[] args) {
     SwingUtilities.invokeLater(
-      new Runnable() {
-        public void run() {
-          new PassengerInfoUI().setVisible(true);
-        }
-      }
-    );
+        () -> new PassengerInfoUI().setVisible(true));
   }
 }

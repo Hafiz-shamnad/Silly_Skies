@@ -2,8 +2,6 @@ package Admin;
 
 import Jdbc_Connection.DatabaseConnection;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -69,7 +67,7 @@ public class EditPassengerInfoUI extends JFrame {
     gbc.anchor = GridBagConstraints.WEST;
     gbc.insets = new Insets(5, 5, 5, 5);
 
-    panel.add(titleLabel,gbc);
+    panel.add(titleLabel, gbc);
 
     gbc.gridy++;
     panel.add(nameLabel, gbc);
@@ -95,13 +93,10 @@ public class EditPassengerInfoUI extends JFrame {
     gbc.gridwidth = 2;
     panel.add(saveButton, gbc);
 
-
     add(panel);
     // Action Listeners
     saveButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           // Retrieve entered passenger details
           String name = nameField.getText();
           String flightNumber = flightNumberField.getText();
@@ -111,41 +106,31 @@ public class EditPassengerInfoUI extends JFrame {
           boolean saved = savePassengerInfo(name, flightNumber, seatNumber);
           if (saved) {
             JOptionPane.showMessageDialog(
-              null,
-              "Passenger details saved successfully."
-            );
+                null,
+                "Passenger details saved successfully.");
             dispose(); // Close the window
           } else {
             JOptionPane.showMessageDialog(
-              null,
-              "Failed to save passenger details."
-            );
+                null,
+                "Failed to save passenger details.");
           }
-        }
-      }
-    );
+        });
 
     cancelButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           dispose(); // Close the window
-        }
-      }
-    );
+        });
 
     add(panel);
   }
 
   // Method to save passenger information into the database
   private boolean savePassengerInfo(
-    String name,
-    String flightNumber,
-    String seatNumber
-  ) {
+      String name,
+      String flightNumber,
+      String seatNumber) {
     try (Connection connection = DatabaseConnection.getConnection()) {
-      String query =
-        "UPDATE ticket_details SET flight_number = ?, seat_number = ? WHERE name = ?";
+      String query = "UPDATE ticket_details SET flight_number = ?, seat_number = ? WHERE name = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, flightNumber);
         statement.setString(2, seatNumber);
@@ -156,20 +141,14 @@ public class EditPassengerInfoUI extends JFrame {
     } catch (SQLException ex) {
       ex.printStackTrace();
       JOptionPane.showMessageDialog(
-        null,
-        "Error saving passenger information: " + ex.getMessage()
-      );
+          null,
+          "Error saving passenger information: " + ex.getMessage());
       return false;
     }
   }
 
   public static void main(String[] args) {
     SwingUtilities.invokeLater(
-      new Runnable() {
-        public void run() {
-          new EditPassengerInfoUI().setVisible(true);
-        }
-      }
-    );
+        () -> new EditPassengerInfoUI().setVisible(true));
   }
 }

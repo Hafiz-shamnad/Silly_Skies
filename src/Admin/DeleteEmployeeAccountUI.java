@@ -1,6 +1,5 @@
 package Admin;
 
-
 import Jdbc_Connection.DatabaseConnection;
 
 import javax.swing.*;
@@ -62,11 +61,10 @@ public class DeleteEmployeeAccountUI extends JFrame {
         gbc.gridwidth = 2;
         panel.add(gobackButton, gbc);
 
-
         add(panel);
 
         // Action Listener for delete button
-        deleteButton.addActionListener(e -> {
+        deleteButton.addActionListener(_ -> {
             String empId = empIdField.getText();
             // Perform database deletion logic
             try (Connection connection = DatabaseConnection.getConnection()) {
@@ -79,7 +77,8 @@ public class DeleteEmployeeAccountUI extends JFrame {
                 int rowsAffected = preparedStatement.executeUpdate();
 
                 if (rowsAffected > 0) {
-                    JOptionPane.showMessageDialog(null, "Employee account deleted successfully!\nEmployee ID: " + empId);
+                    JOptionPane.showMessageDialog(null,
+                            "Employee account deleted successfully!\nEmployee ID: " + empId);
                 } else {
                     JOptionPane.showMessageDialog(null, "Failed to delete employee account.");
                 }
@@ -89,7 +88,7 @@ public class DeleteEmployeeAccountUI extends JFrame {
             }
         });
 
-        gobackButton.addActionListener(e -> {
+        gobackButton.addActionListener(_ -> {
             dispose();
             new AdminEntryUI().setVisible(true);
         });
@@ -98,9 +97,7 @@ public class DeleteEmployeeAccountUI extends JFrame {
         add(panel);
     }
 
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new DeleteEmployeeAccountUI().setVisible(true));
     }
 }
-

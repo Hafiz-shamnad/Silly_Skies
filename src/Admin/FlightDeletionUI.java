@@ -1,16 +1,13 @@
 package Admin;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import javax.swing.*;
 import Jdbc_Connection.DatabaseConnection;
 
 public class FlightDeletionUI extends JFrame {
   private Connection connection;
+
   public FlightDeletionUI() {
     setTitle("Delete Flight");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,7 +64,7 @@ public class FlightDeletionUI extends JFrame {
     panel.add(flightNumberField, gbc);
 
     gbc.gridy++;
-    gbc.gridx=0;
+    gbc.gridx = 0;
     panel.add(travelLabel, gbc);
     gbc.gridx++;
     panel.add(travelField, gbc);
@@ -75,30 +72,22 @@ public class FlightDeletionUI extends JFrame {
     gbc.gridy++;
     gbc.gridx = 0;
     gbc.gridwidth = 2;
-    panel.add(gobackButton,gbc);
+    panel.add(gobackButton, gbc);
     gbc.anchor = GridBagConstraints.EAST;
     panel.add(deleteButton, gbc);
 
-
     // Action Listener
     deleteButton.addActionListener(
-            new ActionListener() {
-              @Override
-              public void actionPerformed(ActionEvent e) {
-                String flightNumber = flightNumberField.getText();
+        _ -> {
+          String flightNumber = flightNumberField.getText();
 
-                // Perform flight deletion logic here
-                deleteFlight(flightNumber);
-              }
-            }
-    );
+          // Perform flight deletion logic here
+          deleteFlight(flightNumber);
+        });
 
-    gobackButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        dispose();
-        new AdminEntryUI().setVisible(true);
-      }
+    gobackButton.addActionListener(_ -> {
+      dispose();
+      new AdminEntryUI().setVisible(true);
     });
 
     add(panel);
@@ -109,7 +98,6 @@ public class FlightDeletionUI extends JFrame {
     try {
       if (connection == null || connection.isClosed()) {
         connection = DatabaseConnection.getConnection();
-        System.out.println("Connection established."); // Log connection status
       }
       if (connection != null) {
         String deleteQuery = "DELETE FROM flight_details WHERE flight_num = ?";
@@ -133,14 +121,8 @@ public class FlightDeletionUI extends JFrame {
     }
   }
 
-
   public static void main(String[] args) {
     SwingUtilities.invokeLater(
-            new Runnable() {
-              public void run() {
-                new FlightDeletionUI().setVisible(true);
-              }
-            }
-    );
+        () -> new FlightDeletionUI().setVisible(true));
   }
 }

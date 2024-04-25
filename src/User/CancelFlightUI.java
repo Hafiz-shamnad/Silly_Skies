@@ -4,11 +4,7 @@ import Jdbc_Connection.DatabaseConnection;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class CancelFlightUI extends JFrame {
 
@@ -37,7 +33,7 @@ public class CancelFlightUI extends JFrame {
         JTextField ticketIdField = new JTextField(20);
 
         JButton confirmButton = new JButton("Confirm to cancel");
-        JButton gobackButton = new JButton("Go Back");
+        JButton goBackButton = new JButton("Go Back");
 
         // Set font colors and styles
         Font labelFont = new Font("Poppins", Font.BOLD, 14);
@@ -65,9 +61,9 @@ public class CancelFlightUI extends JFrame {
         confirmButton.setBackground(buttonBgColor);
         confirmButton.setForeground(buttonTextColor);
 
-        gobackButton.setFont(labelFont);
-        gobackButton.setBackground(buttonBgColor);
-        gobackButton.setForeground(buttonTextColor);
+        goBackButton.setFont(labelFont);
+        goBackButton.setBackground(buttonBgColor);
+        goBackButton.setForeground(buttonTextColor);
 
         // Layout
         JPanel panel = new JPanel(new GridBagLayout());
@@ -79,7 +75,7 @@ public class CancelFlightUI extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        panel.add(headingLabel,gbc);
+        panel.add(headingLabel, gbc);
 
         gbc.gridy++;
         panel.add(ticketIdLabel, gbc);
@@ -105,37 +101,31 @@ public class CancelFlightUI extends JFrame {
         panel.add(confirmButton, gbc);
 
         gbc.gridy++;
-        panel.add(gobackButton, gbc);
+        panel.add(goBackButton, gbc);
 
         add(panel);
 
         // Action Listeners
-        confirmButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String bookingID = ticketIdField.getText();
-                // Perform cancellation logic
-                cancelBooking(bookingID);
-            }
+        confirmButton.addActionListener(_ -> {
+            String bookingID = ticketIdField.getText();
+            // Perform cancellation logic
+            cancelBooking(bookingID);
         });
 
-        gobackButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Close the window
-                dispose();
-                // Close the connection if it's open
-                try {
-                    if (connection != null && !connection.isClosed()) {
-                        connection.close();
-                        System.out.println("Connection closed."); // Log connection status
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error occurred while closing the connection: " + ex.getMessage());
-                }finally {
-                    new UserEntryUI().setVisible(true);
+        goBackButton.addActionListener(_ -> {
+            // Close the window
+            dispose();
+            // Close the connection if it's open
+            try {
+                if (connection != null && !connection.isClosed()) {
+                    connection.close();
+                    System.out.println("Connection closed."); // Log connection status
                 }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error occurred while closing the connection: " + ex.getMessage());
+            } finally {
+                new UserEntryUI().setVisible(true);
             }
         });
 
@@ -148,7 +138,6 @@ public class CancelFlightUI extends JFrame {
             // Open the connection if it's not open
             if (connection == null || connection.isClosed()) {
                 connection = DatabaseConnection.getConnection();
-                System.out.println("Connection established."); // Log connection status
             }
 
             String deleteQuery = "DELETE FROM ticket_details WHERE ticket_number = ?";
@@ -179,10 +168,6 @@ public class CancelFlightUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new CancelFlightUI().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new CancelFlightUI().setVisible(true));
     }
 }

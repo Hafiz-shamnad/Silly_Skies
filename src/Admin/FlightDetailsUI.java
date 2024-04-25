@@ -3,8 +3,6 @@ package Admin;
 import static Jdbc_Connection.DatabaseConnection.getConnection;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.*;
@@ -14,7 +12,7 @@ public class FlightDetailsUI extends JFrame {
   public FlightDetailsUI() {
     setTitle("Enter Flight Details");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(1440, 1024);
+    setSize(1350, 720);
     setLocationRelativeTo(null); // Center the window
     getContentPane().setBackground(new Color(238, 238, 238)); // Set background color
 
@@ -105,44 +103,39 @@ public class FlightDetailsUI extends JFrame {
     panel.add(passengerCapacityField, gbc);
 
     gbc.gridy++;
-    gbc.gridx=0;
+    gbc.gridx = 0;
     panel.add(gobackButton, gbc);
 
     gbc.anchor = GridBagConstraints.EAST;
     gbc.gridwidth = 2;
     panel.add(saveButton, gbc);
 
-
-
     // Action Listeners
     saveButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           String flightNumber = flightNumberField.getText();
           String flightModel = modelField.getText();
           String luggage = luggageField.getText();
           String capacity = passengerCapacityField.getText();
 
-          String sql =
-            "INSERT INTO flight_details (flight_num, model,luggage_capacity,passenger_capacity)\n" +
-            "VALUES (" +
-            '"' +
-            flightNumber +
-            '"' +
-            ", " +
-            '"' +
-            flightModel +
-            '"' +
-            ", " +
-            '"' +
-            luggage +
-            '"' +
-            ", " +
-            '"' +
-            capacity +
-            '"' +
-            ");";
+          String sql = "INSERT INTO flight_details (flight_num, model,luggage_capacity,passenger_capacity)\n" +
+              "VALUES (" +
+              '"' +
+              flightNumber +
+              '"' +
+              ", " +
+              '"' +
+              flightModel +
+              '"' +
+              ", " +
+              '"' +
+              luggage +
+              '"' +
+              ", " +
+              '"' +
+              capacity +
+              '"' +
+              ");";
           System.out.println(sql);
           // Try-with-resources to automatically close resources
           try (Statement statement = getConnection().createStatement()) {
@@ -151,7 +144,20 @@ public class FlightDetailsUI extends JFrame {
 
             // Check if any rows were affected
             if (rowsAffected > 0) {
-              System.out.println("Data inserted successfully.");
+              JOptionPane.showMessageDialog(
+                  null,
+                  "Flight details saved:\n" +
+                      "Flight Number: " +
+                      flightNumber +
+                      "\n" +
+                      "Departure Location: " +
+                      flightModel +
+                      "\n" +
+                      "Arrival Location: " +
+                      luggage +
+                      "\n" +
+                      "Departure Time: " +
+                      capacity);
             } else {
               System.out.println("Failed to insert data.");
             }
@@ -159,36 +165,13 @@ public class FlightDetailsUI extends JFrame {
             ex.printStackTrace();
             // Handle SQL exceptions
           }
-          // Save flight details logic here
-          // For demonstration, just displaying a message
-          JOptionPane.showMessageDialog(
-            null,
-            "Flight details saved:\n" +
-            "Flight Number: " +
-            flightNumber +
-            "\n" +
-            "Departure Location: " +
-            flightModel +
-            "\n" +
-            "Arrival Location: " +
-            luggage +
-            "\n" +
-            "Departure Time: " +
-            capacity
-          );
-        }
-      }
-    );
+        });
 
     gobackButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           dispose();
           new AdminEntryUI().setVisible(true);
-        }
-      }
-    );
+        });
 
     add(panel);
   }

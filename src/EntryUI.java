@@ -29,25 +29,22 @@ public class EntryUI extends JFrame {
     try {
       // Change "imagePath" to the path where your image is located
       File imageFile = new File(
-        "/home/anonym8y/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-01.png"
-      );
+          "/home/anonym8y/Clg_project/Project1-dms/Airline Management/src/Resources/aviation_logo-22 [Converted]-01.png");
       if (imageFile.exists()) {
         Image originalImage = ImageIO.read(imageFile);
         // Scale the image to desired dimensions
         int scaledWidth = 800; // Adjust width as needed
         int scaledHeight = 650; // Adjust height as needed
         Image scaledImage = originalImage.getScaledInstance(
-          scaledWidth,
-          scaledHeight,
-          Image.SCALE_SMOOTH
-        );
+            scaledWidth,
+            scaledHeight,
+            Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(scaledImage);
         JLabel imageLabel = new JLabel(icon);
         getContentPane().add(imageLabel, BorderLayout.WEST); // Add image label to the content pane
       } else {
         System.err.println(
-          "Image file not found: " + imageFile.getAbsolutePath()
-        );
+            "Image file not found: " + imageFile.getAbsolutePath());
       }
     } catch (IOException ex) {
       ex.printStackTrace();
@@ -56,11 +53,9 @@ public class EntryUI extends JFrame {
     // Create buttons
     RoundedCornerButton userLoginButton = new RoundedCornerButton("USER LOGIN");
     RoundedCornerButton employeeLoginButton = new RoundedCornerButton(
-      "EMPLOYEE LOGIN"
-    );
+        "EMPLOYEE LOGIN");
     RoundedCornerButton createAccountButton = new RoundedCornerButton(
-      "CREATE ACCOUNT"
-    );
+        "CREATE ACCOUNT");
 
     // Set button colors
     Color buttonColor = new Color(49, 54, 63);
@@ -88,19 +83,19 @@ public class EntryUI extends JFrame {
     createAccountButton.setBounds(105, 440, buttonWidth, buttonHeight);
 
     // Add action listeners to the buttons
-    userLoginButton.addActionListener(e -> {
+    userLoginButton.addActionListener(_ -> {
       dispose();
       // Add your code for user login action
       new UserLoginUI().setVisible(true);
     });
 
-    employeeLoginButton.addActionListener(e -> {
+    employeeLoginButton.addActionListener(_ -> {
       dispose();
       // Add your code for employee login action
       new EmployeeLoginUI().setVisible(true);
     });
 
-    createAccountButton.addActionListener(e -> {
+    createAccountButton.addActionListener(_ -> {
       // Add your code for user login action
       dispose();
       new CreateAccountUI().setVisible(true);
@@ -140,12 +135,12 @@ public class EntryUI extends JFrame {
       super.paintComponent(g);
     }
 
-      @Override
-      protected void paintBorder(Graphics g) {
-          // Set the color of the border to match the background color of the button
-          g.setColor(getBackground());
-          g.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
-      }
+    @Override
+    protected void paintBorder(Graphics g) {
+      // Set the color of the border to match the background color of the button
+      g.setColor(getBackground());
+      g.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+    }
 
   }
 

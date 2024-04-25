@@ -2,21 +2,16 @@ package Admin;
 
 import static Jdbc_Connection.DatabaseConnection.getConnection;
 
-import Jdbc_Connection.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
 import javax.swing.*;
 
 public class FlightCreationUI extends JFrame {
 
-  int totalseats = 0;
-
   public FlightCreationUI() {
     setTitle("Flight Creation");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(1440, 1024);
+    setSize(1350, 720);
     setLocationRelativeTo(null); // Center the window
 
     JLabel headingLabel = new JLabel("Create Flight");
@@ -140,105 +135,69 @@ public class FlightCreationUI extends JFrame {
     add(panel);
 
     // Action Listener
-    createButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          int travelId = Integer.parseInt(travelIdField.getText());
-          String departure = departureField.getText();
-          String arrival = arrivalField.getText();
-          String departureTime = departureTimeField.getText();
-          String arrivalTime = arrivalTimeField.getText();
-          String flightNumber = flightNumberField.getText();
+    createButton.addActionListener(_ -> {
+      int travelId = Integer.parseInt(travelIdField.getText());
+      String departure = departureField.getText();
+      String arrival = arrivalField.getText();
+      String departureTime = departureTimeField.getText();
+      String arrivalTime = arrivalTimeField.getText();
+      String flightNumber = flightNumberField.getText();
 
-          String sql =
-            "INSERT INTO travel_details (travel_id,flight_num,departure_location,arrival_location," +
-            "departure_time,arrival_time)\n" +
-            "VALUES (" +
-            '"' +
-            travelId +
-            '"' +
-            ", " +
-            '"' +
-            flightNumber +
-            '"' +
-            ", " +
-            '"' +
-            departure +
-            '"' +
-            ", " +
-            '"' +
-            arrival +
-            '"' +
-            ", " +
-            "'" +
-            departureTime +
-            "'" +
-            ", " +
-            "'" +
-            arrivalTime +
-            "'" +
-            ");\n";
-          System.out.println(sql);
-          // Try-with-resources to automatically close resources
-          try (Statement statement = getConnection().createStatement()) {
-            // Execute the INSERT query
-            int rowsAffected = statement.executeUpdate(sql);
+      try (Connection connection = getConnection()) {
+        // Retrieve total seats for the given flight number
+        String selectFlightQuery = "SELECT passenger_capacity FROM flight_details WHERE flight_num = ?";
+        try (PreparedStatement selectFlightStatement = connection.prepareStatement(selectFlightQuery)) {
+          selectFlightStatement.setString(1, flightNumber);
+          try (ResultSet resultSet = selectFlightStatement.executeQuery()) {
+            if (resultSet.next()) {
+              int totalSeats = resultSet.getInt("passenger_capacity");
+              // Insert into travel_details
+              String insertTravelQuery = "INSERT INTO travel_details (travel_id, flight_num, departure_location, arrival_location, departure_time, arrival_time, available_seats) VALUES (?, ?, ?, ?, ?, ?, ?)";
+              try (PreparedStatement insertTravelStatement = connection.prepareStatement(insertTravelQuery)) {
+                insertTravelStatement.setInt(1, travelId);
+                insertTravelStatement.setString(2, flightNumber);
+                insertTravelStatement.setString(3, departure);
+                insertTravelStatement.setString(4, arrival);
+                insertTravelStatement.setString(5, departureTime);
+                insertTravelStatement.setString(6, arrivalTime);
+                insertTravelStatement.setInt(7, totalSeats); // Set available seats to total seats
+                int rowsAffected = insertTravelStatement.executeUpdate();
 
-            // Check if any rows were affected
-            if (rowsAffected > 0) {
-              System.out.println("Data inserted successfully.");
+                if (rowsAffected > 0) {
+                  String message = "Flight created with the following details:\n" +
+                      "Flight Number: " + flightNumber + "\n" +
+                      "Departure: " + departure + "\n" +
+                      "Arrival: " + arrival + "\n" +
+                      "Departure Time: " + departureTime + "\n" +
+                      "Arrival Time: " + arrivalTime + "\n";
+                  JOptionPane.showMessageDialog(null, message);
+                } else {
+                  System.out.println("Failed to insert data.");
+                }
+              }
             } else {
-              System.out.println("Failed to insert data.");
+              System.out.println("Flight number not found.");
             }
-          } catch (SQLException ex) {
-            ex.printStackTrace();
-            // Handle SQL exceptions
           }
-          // Perform flight creation logic here
-          // For demonstration, showing a message dialog
-          String message =
-            "Flight created with the following details:\n" +
-            "Flight Number: " +
-            flightNumber +
-            "\n" +
-            "Departure: " +
-            departure +
-            "\n" +
-            "Arrival: " +
-            arrival +
-            "\n" +
-            "Departure Time: " +
-            departureTime +
-            "\n" +
-            "Arrival Time: " +
-            arrivalTime +
-            "\n";
-          JOptionPane.showMessageDialog(null, message);
         }
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
       }
-    );
+
+    });
 
     goBackButton.addActionListener(
-      new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        _ -> {
           dispose();
           new AdminEntryUI().setVisible(true);
-        }
-      }
-    );
+        });
 
     add(panel);
   }
 
   public static void main(String[] args) {
     SwingUtilities.invokeLater(
-      new Runnable() {
-        public void run() {
-          new FlightCreationUI().setVisible(true);
-        }
-      }
-    );
+        () -> new FlightCreationUI().setVisible(true));
   }
 }
