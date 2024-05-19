@@ -1,0 +1,64 @@
+CREATE DATABASE silly_skies;
+
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'User@2024';
+
+GRANT ALL PRIVILEGES ON silly_skies.* TO 'user'@'localhost';
+
+FLUSH PRIVILEGES;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255),
+    password VARCHAR(255),
+    user_type VARCHAR(255) DEFAULT 'user',
+    email VARCHAR(255),
+    house_address VARCHAR(255),
+    passport_number VARCHAR(255)
+);
+
+CREATE TABLE flight_details (
+    flight_num VARCHAR(20) PRIMARY KEY,
+    model VARCHAR(50),
+    luggage_capacity INT,
+    passenger_capacity INT
+);
+
+CREATE TABLE travel_details (
+    travel_id INT PRIMARY KEY AUTO_INCREMENT,
+    flight_num VARCHAR(20),
+    departure_location VARCHAR(100),
+    arrival_location VARCHAR(100),
+    departure_time DATETIME,
+    arrival_time DATETIME,
+    available_seats INT,
+    FOREIGN KEY (flight_num) REFERENCES silly_skies.flight_details(flight_num)
+);
+
+INSERT INTO users (username, password, user_type)
+VALUES ('admin', 'admin', 'admin');
+
+CREATE TABLE ticket_details (
+ticket_number INT AUTO_INCREMENT PRIMARY KEY,
+passenger_name VARCHAR(255),
+passport_number VARCHAR(20),
+flight_num VARCHAR(20),
+seat_number VARCHAR(10),
+booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (flight_num) REFERENCES flight_details(flight_num)
+ );
+
+
+CREATE TABLE payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    card_number VARCHAR(16) NOT NULL,
+    expiry_date VARCHAR(10) NOT NULL,
+    cvv VARCHAR(3) NOT NULL,
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE employees (
+    employee_id varchar(100) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    password VARCHAR(50) NOT NULL
+);
